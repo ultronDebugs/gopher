@@ -1,37 +1,19 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/ultrondebugs/gopher/application"
 )
 
 func main() {
 
-	router := chi.NewRouter()
+	app := application.New()
 
-	router.Use(middleware.Logger)
-
-	router.Get("/hello", basicHandler)
-
-	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Welcome to the home page!"))
-	})
-
-	fmt.Println("Hello, World!")
-	server := &http.Server{Addr: ":8080",
-		Handler: router}
-
-	err := server.ListenAndServe()
-
+	err := app.Start(context.TODO())
 	if err != nil {
-		fmt.Println("Error starting server:", err)
+		fmt.Println("something went wrong", err)
 	}
 
-}
-
-func basicHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello ninjas"))
 }
